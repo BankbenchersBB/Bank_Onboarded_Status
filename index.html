@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banking Onboarding Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #0f4c81;
+        --primary-light: #1a6bb3;
+        --accent: #00d4aa;
+        --accent-dark: #00a085;
+        --bg-main: #f8fafb;
+        --bg-card: #ffffff;
+        --text-primary: #1a202c;
+        --text-secondary: #4a5568;
+        --border: #e2e8f0;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --error: #ef4444;
+        --region-color: #3b82f6;
+        --branch-color: #8b5cf6;
+        --pacs-color: #ec4899;
+        --shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg-main);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-light) 100%
+        );
+        color: white;
+        padding: 2rem 2rem 4rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0 Q300,60 600,30 T1200,0 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.05)"/></svg>')
+          no-repeat bottom;
+        background-size: cover;
+        opacity: 0.3;
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        font-weight: 400;
+      }
+
+      /* Container */
+      .container {
+        max-width: 1400px;
+        margin: -3rem auto 2rem;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Stats Cards */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        border-left: 4px solid var(--accent);
+        transition: all 0.3s ease;
+        animation: slideUp 0.6s ease-out;
+      }
+
+      .stat-card:nth-child(2) {
+        animation-delay: 0.1s;
+        border-left-color: var(--success);
+      }
+      .stat-card:nth-child(3) {
+        animation-delay: 0.2s;
+        border-left-color: var(--warning);
+      }
+      .stat-card:nth-child(4) {
+        animation-delay: 0.3s;
+        border-left-color: var(--error);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        font-family: "Space Mono", monospace;
+      }
+
+      /* Filters Section */
+      .filters-section {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        animation: slideUp 0.6s ease-out 0.4s backwards;
+      }
+
+      .filters-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .filters-header h2 {
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .filter-group label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .filter-group select,
+      .filter-group input {
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg-main);
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .filter-group select:focus,
+      .filter-group input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+      }
+
+      .filter-group select:hover {
+        border-color: var(--primary-light);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "DM Sans", sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-light) 100%
+        );
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-secondary {
+        background: var(--bg-main);
+        color: var(--text-primary);
+        border: 2px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        background: white;
+        border-color: var(--primary);
+      }
+
+      /* Table Section */
+      .table-section {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        animation: slideUp 0.6s ease-out 0.5s backwards;
+        overflow-x: auto;
+      }
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .table-header h2 {
+        font-size: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      .search-box {
+        position: relative;
+        width: 300px;
+        max-width: 100%;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg-main);
+        transition: all 0.3s ease;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 0.9rem;
+      }
+
+      .data-table thead {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-light) 100%
+        );
+        color: white;
+      }
+
+      .data-table thead th {
+        padding: 1rem;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .data-table thead th:first-child {
+        border-top-left-radius: 10px;
+        text-align: left;
+      }
+
+      .data-table thead th:last-child {
+        border-top-right-radius: 10px;
+      }
+
+      /* Section headers with different colors */
+      .section-header-region {
+        background: var(--region-color) !important;
+        text-align: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+
+      .section-header-branch {
+        background: var(--branch-color) !important;
+        text-align: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+
+      .section-header-pacs {
+        background: var(--pacs-color) !important;
+        text-align: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+
+      .data-table tbody tr {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        transition: all 0.3s ease;
+      }
+
+      .data-table tbody tr:hover {
+        background: var(--bg-main);
+        transform: scale(1.01);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .data-table tbody td {
+        padding: 1rem;
+        color: var(--text-primary);
+      }
+
+      /* Serial number styling */
+      .data-table tbody td:first-child {
+        text-align: center;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-family: "Space Mono", monospace;
+      }
+
+      /* Add vertical borders between sections */
+      .data-table tbody td:nth-child(5) {
+        border-right: 3px solid var(--region-color);
+      }
+
+      .data-table tbody td:nth-child(8) {
+        border-right: 3px solid var(--branch-color);
+      }
+
+      .data-table tbody td:nth-child(11) {
+        border-right: 3px solid var(--pacs-color);
+      }
+
+      .bank-name {
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .metric-cell {
+        text-align: center;
+        font-family: "Space Mono", monospace;
+        font-weight: 600;
+      }
+
+      .metric-total {
+        color: var(--primary);
+      }
+
+      .metric-uploaded {
+        color: var(--success);
+      }
+
+      .metric-errors {
+        color: var(--error);
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-secondary);
+      }
+
+      .empty-state svg {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 1.5rem;
+        opacity: 0.3;
+      }
+
+      /* Password Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .modal-content {
+        background-color: var(--bg-card);
+        margin: 15% auto;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: var(--shadow-lg);
+        animation: slideUp 0.3s ease-out;
+      }
+
+      .modal h3 {
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .modal p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+      }
+
+      .modal input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: "DM Sans", sans-serif;
+        margin-bottom: 1rem;
+      }
+
+      .modal input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 0.875rem;
+        margin-top: -0.5rem;
+        margin-bottom: 0.5rem;
+        display: none;
+      }
+
+      /* Animations */
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 1.8rem;
+        }
+
+        .stat-value {
+          font-size: 2rem;
+        }
+
+        .filters-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .table-section {
+          padding: 1rem;
+        }
+
+        .data-table {
+          font-size: 0.8rem;
+        }
+
+        .data-table thead th,
+        .data-table tbody td {
+          padding: 0.75rem 0.5rem;
+        }
+      }
+
+      /* Charts Container */
+      .charts-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .chart-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        animation: slideUp 0.6s ease-out 0.6s backwards;
+      }
+
+      .chart-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      #completionChart,
+      #stateChart {
+        max-height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Password Modal -->
+    <div id="passwordModal" class="modal">
+      <div class="modal-content">
+        <h3>🔒 Export Protection</h3>
+        <p>Please enter password to export CSV data</p>
+        <input
+          type="password"
+          id="passwordInput"
+          placeholder="Enter password"
+          onkeypress="if (event.key === 'Enter') verifyPassword();"
+        />
+        <div class="error-message" id="errorMessage">
+          ❌ Incorrect password! Try again.
+        </div>
+        <div class="modal-buttons">
+          <button class="btn btn-secondary" onclick="closePasswordModal()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" onclick="verifyPassword()">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <h1>🏦 BANKBENCHERS ONBOARDED BANKS</h1>
+        <p>Real-time tracking of Region, Branch & PACS onboarding status</p>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Banks</div>
+          <div class="stat-value" id="totalBanks">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Completed</div>
+          <div
+            class="stat-value"
+            id="completedCount"
+            style="color: var(--success)"
+          >
+            0
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending</div>
+          <div
+            class="stat-value"
+            id="pendingCount"
+            style="color: var(--warning)"
+          >
+            0
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="charts-section">
+        <div class="chart-card">
+          <h3>📊 Completion Status</h3>
+          <canvas id="completionChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>📍 State-wise Distribution</h3>
+          <canvas id="stateChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Filters Section -->
+      <div class="filters-section">
+        <div class="filters-header">
+          <h2>🔍 Filters</h2>
+          <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="resetFilters()">
+              ↺ Reset Filters
+            </button>
+            <button class="btn btn-primary" onclick="showPasswordModal()">
+              ⬇ Export CSV
+            </button>
+          </div>
+        </div>
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label for="filterBankType">Bank Type</label>
+            <select id="filterBankType" onchange="applyFilters()">
+              <option value="">All Types</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filterState">State Name</label>
+            <select id="filterState" onchange="applyFilters()">
+              <option value="">All States</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filterBankName">Bank Name</label>
+            <select id="filterBankName" onchange="applyFilters()">
+              <option value="">All Banks</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filterStatus">Final Status</label>
+            <select id="filterStatus" onchange="applyFilters()">
+              <option value="">All Status</option>
+              <option value="Completed">Completed</option>
+              <option value="Not Completed">Not Completed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="table-section">
+        <div class="table-header">
+          <h2>📋 Data Overview</h2>
+          <div class="search-box">
+            <span class="search-icon">🔎</span>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search in table..."
+              oninput="searchTable()"
+            />
+          </div>
+        </div>
+        <div style="overflow-x: auto">
+          <table class="data-table" id="dataTable">
+            <thead>
+              <tr>
+                <th rowspan="2" style="text-align: center">S.No</th>
+                <th rowspan="2">Bank Name</th>
+                <th colspan="3" class="section-header-region">REGION</th>
+                <th colspan="3" class="section-header-branch">BRANCH</th>
+                <th colspan="3" class="section-header-pacs">PACS</th>
+              </tr>
+              <tr>
+                <th>Total</th>
+                <th>Uploaded</th>
+                <th>Errors</th>
+                <th>Total</th>
+                <th>Uploaded</th>
+                <th>Errors</th>
+                <th>Total</th>
+                <th>Uploaded</th>
+                <th>Errors</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Data will be populated here -->
+            </tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty-state" style="display: none">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h3>No data found</h3>
+          <p>Try adjusting your filters or search criteria</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+    <script>
+      const EXPORT_PASSWORD = "1234"; // Password for CSV export
+      let allData = [];
+      let filteredData = [];
+      let completionChart, stateChart;
+
+      // Google Sheets se data load karne ka function
+      async function loadGoogleSheetsData() {
+        // Replace this with your published Google Sheets CSV link
+        const SHEET_URL =
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxm2eW1rjwXdGUN-DTnmerVbfpqiMvNZPPJpASzlkc-FhyDZqgUgnzOI6_oXnzSMGO_-WcDY91Ru96/pub?output=csv";
+
+        try {
+          console.log("Loading data from Google Sheets...");
+          const response = await fetch(SHEET_URL);
+          const csv = await response.text();
+          console.log("CSV data received, parsing...");
+          allData = parseGoogleSheetCSV(csv);
+
+          if (allData.length === 0) {
+            console.error("No data parsed from CSV");
+            alert(
+              "⚠️ No data found in Google Sheets. Please check the sheet link.",
+            );
+            return;
+          }
+
+          filteredData = [...allData];
+          console.log(`✅ Successfully loaded ${allData.length} records`);
+          initDashboard();
+        } catch (error) {
+          console.error("Error loading data:", error);
+          alert(
+            "❌ Data load nahi ho paya. CSV link check karo!\n\nError: " +
+              error.message,
+          );
+        }
+      }
+
+      function parseGoogleSheetCSV(csv) {
+        const lines = csv.split("\n");
+        const data = [];
+
+        console.log(`Total lines in CSV: ${lines.length}`);
+
+        // Row 1-4 are headers, data starts from row 5 (index 4)
+        for (let i = 4; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+
+          // Parse CSV line properly handling quoted values
+          const values = parseCSVLine(line);
+
+          // Skip if not enough columns
+          if (values.length < 20) continue;
+
+          // Skip empty rows (check critical columns)
+          if (!values[0] || !values[1] || !values[2]) continue;
+
+          try {
+            const bankData = {
+              type: values[0].trim(), // Column A: TYPE
+              state: values[1].trim(), // Column B: STATE NAME
+              bankName: values[2].trim(), // Column C: BANK NAME
+              regionTotal: parseInt(values[7]) || 0, // Column H
+              regionUploaded: parseInt(values[8]) || 0, // Column I
+              regionErrors: parseInt(values[9]) || 0, // Column J
+              branchTotal: parseInt(values[11]) || 0, // Column L
+              branchUploaded: parseInt(values[12]) || 0, // Column M
+              branchErrors: parseInt(values[13]) || 0, // Column N
+              pacsTotal: parseInt(values[15]) || 0, // Column P
+              pacsUploaded: parseInt(values[16]) || 0, // Column Q
+              pacsErrors: parseInt(values[17]) || 0, // Column R
+              finalStatus: (values[25] || "Not Completed").trim(), // Column Z: FINAL STATUS
+            };
+
+            data.push(bankData);
+          } catch (err) {
+            console.warn(`Error parsing row ${i + 1}:`, err);
+          }
+        }
+
+        console.log(`Parsed ${data.length} valid records`);
+        return data;
+      }
+
+      // Helper function to properly parse CSV line with quoted values
+      function parseCSVLine(line) {
+        const values = [];
+        let current = "";
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === "," && !inQuotes) {
+            values.push(current.trim());
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+
+        values.push(current.trim());
+        return values;
+      }
+
+      // Password Modal Functions
+      function showPasswordModal() {
+        document.getElementById("passwordModal").style.display = "block";
+        document.getElementById("passwordInput").value = "";
+        document.getElementById("errorMessage").style.display = "none";
+        document.getElementById("passwordInput").focus();
+      }
+
+      function closePasswordModal() {
+        document.getElementById("passwordModal").style.display = "none";
+      }
+
+      function verifyPassword() {
+        const password = document.getElementById("passwordInput").value;
+
+        if (password === EXPORT_PASSWORD) {
+          closePasswordModal();
+          exportToCSV();
+        } else {
+          document.getElementById("errorMessage").style.display = "block";
+          document.getElementById("passwordInput").value = "";
+          document.getElementById("passwordInput").focus();
+        }
+      }
+
+      // Initialize Dashboard
+      function initDashboard() {
+        populateFilters();
+        updateStats();
+        renderTable();
+        initCharts();
+      }
+
+      // Populate Filter Dropdowns
+      function populateFilters() {
+        const bankTypes = [...new Set(allData.map((item) => item.type))]
+          .filter(Boolean)
+          .sort();
+        const states = [...new Set(allData.map((item) => item.state))]
+          .filter(Boolean)
+          .sort();
+        const bankNames = [...new Set(allData.map((item) => item.bankName))]
+          .filter(Boolean)
+          .sort();
+
+        const bankTypeSelect = document.getElementById("filterBankType");
+        const stateSelect = document.getElementById("filterState");
+        const bankNameSelect = document.getElementById("filterBankName");
+
+        // Clear existing options (except first "All" option)
+        bankTypeSelect.innerHTML = '<option value="">All Types</option>';
+        stateSelect.innerHTML = '<option value="">All States</option>';
+        bankNameSelect.innerHTML = '<option value="">All Banks</option>';
+
+        bankTypes.forEach((type) => {
+          const option = document.createElement("option");
+          option.value = type;
+          option.textContent = type;
+          bankTypeSelect.appendChild(option);
+        });
+
+        states.forEach((state) => {
+          const option = document.createElement("option");
+          option.value = state;
+          option.textContent = state;
+          stateSelect.appendChild(option);
+        });
+
+        bankNames.forEach((bank) => {
+          const option = document.createElement("option");
+          option.value = bank;
+          option.textContent = bank;
+          bankNameSelect.appendChild(option);
+        });
+      }
+
+      // Apply Filters with Cascading
+      function applyFilters() {
+        const bankType = document.getElementById("filterBankType").value;
+        const state = document.getElementById("filterState").value;
+        const bankName = document.getElementById("filterBankName").value;
+        const status = document.getElementById("filterStatus").value;
+
+        filteredData = allData.filter((item) => {
+          return (
+            (!bankType || item.type === bankType) &&
+            (!state || item.state === state) &&
+            (!bankName || item.bankName === bankName) &&
+            (!status || item.finalStatus === status)
+          );
+        });
+
+        // Update cascading dropdowns based on selected filters
+        updateCascadingDropdowns();
+
+        updateStats();
+        renderTable();
+        updateCharts();
+      }
+
+      // Update State and Bank Name dropdowns based on Bank Type selection
+      function updateCascadingDropdowns() {
+        const selectedBankType =
+          document.getElementById("filterBankType").value;
+        const selectedState = document.getElementById("filterState").value;
+        const selectedBankName =
+          document.getElementById("filterBankName").value;
+
+        // Filter data based on current Bank Type selection
+        let availableData = allData;
+        if (selectedBankType) {
+          availableData = availableData.filter(
+            (item) => item.type === selectedBankType,
+          );
+        }
+
+        // Update State dropdown
+        const stateSelect = document.getElementById("filterState");
+        const states = [...new Set(availableData.map((item) => item.state))]
+          .filter(Boolean)
+          .sort();
+
+        stateSelect.innerHTML = '<option value="">All States</option>';
+        states.forEach((state) => {
+          const option = document.createElement("option");
+          option.value = state;
+          option.textContent = state;
+          if (state === selectedState) option.selected = true;
+          stateSelect.appendChild(option);
+        });
+
+        // Filter data further based on State selection
+        if (selectedState) {
+          availableData = availableData.filter(
+            (item) => item.state === selectedState,
+          );
+        }
+
+        // Update Bank Name dropdown
+        const bankNameSelect = document.getElementById("filterBankName");
+        const banks = [...new Set(availableData.map((item) => item.bankName))]
+          .filter(Boolean)
+          .sort();
+
+        bankNameSelect.innerHTML = '<option value="">All Banks</option>';
+        banks.forEach((bank) => {
+          const option = document.createElement("option");
+          option.value = bank;
+          option.textContent = bank;
+          if (bank === selectedBankName) option.selected = true;
+          bankNameSelect.appendChild(option);
+        });
+      }
+
+      // Reset Filters
+      function resetFilters() {
+        document.getElementById("filterBankType").value = "";
+        document.getElementById("filterState").value = "";
+        document.getElementById("filterBankName").value = "";
+        document.getElementById("filterStatus").value = "";
+        document.getElementById("searchInput").value = "";
+
+        filteredData = [...allData];
+        populateFilters();
+        updateStats();
+        renderTable();
+        updateCharts();
+      }
+
+      // Update Statistics
+      function updateStats() {
+        const totalBanks = filteredData.length;
+        const completed = filteredData.filter(
+          (item) => item.finalStatus === "Completed",
+        ).length;
+        const pending = totalBanks - completed;
+
+        document.getElementById("totalBanks").textContent = totalBanks;
+        document.getElementById("completedCount").textContent = completed;
+        document.getElementById("pendingCount").textContent = pending;
+      }
+
+      // Render Table
+      function renderTable() {
+        const tbody = document.getElementById("tableBody");
+        const emptyState = document.getElementById("emptyState");
+
+        tbody.innerHTML = "";
+
+        if (filteredData.length === 0) {
+          emptyState.style.display = "block";
+          return;
+        }
+
+        emptyState.style.display = "none";
+
+        filteredData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.style.animation = `fadeIn 0.3s ease-out ${index * 0.05}s backwards`;
+
+          row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="bank-name">${item.bankName}</td>
+                    <td class="metric-cell metric-total">${item.regionTotal}</td>
+                    <td class="metric-cell metric-uploaded">${item.regionUploaded}</td>
+                    <td class="metric-cell metric-errors">${item.regionErrors}</td>
+                    <td class="metric-cell metric-total">${item.branchTotal}</td>
+                    <td class="metric-cell metric-uploaded">${item.branchUploaded}</td>
+                    <td class="metric-cell metric-errors">${item.branchErrors}</td>
+                    <td class="metric-cell metric-total">${item.pacsTotal}</td>
+                    <td class="metric-cell metric-uploaded">${item.pacsUploaded}</td>
+                    <td class="metric-cell metric-errors">${item.pacsErrors}</td>
+                `;
+
+          tbody.appendChild(row);
+        });
+      }
+
+      // Search Table
+      function searchTable() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+
+        if (!searchTerm) {
+          filteredData = allData.filter((item) => {
+            const bankType = document.getElementById("filterBankType").value;
+            const state = document.getElementById("filterState").value;
+            const bankName = document.getElementById("filterBankName").value;
+            const status = document.getElementById("filterStatus").value;
+
+            return (
+              (!bankType || item.type === bankType) &&
+              (!state || item.state === state) &&
+              (!bankName || item.bankName === bankName) &&
+              (!status || item.finalStatus === status)
+            );
+          });
+        } else {
+          filteredData = allData.filter((item) => {
+            return (
+              item.bankName.toLowerCase().includes(searchTerm) ||
+              item.state.toLowerCase().includes(searchTerm) ||
+              item.type.toLowerCase().includes(searchTerm)
+            );
+          });
+        }
+
+        updateStats();
+        renderTable();
+      }
+
+      // Initialize Charts
+      function initCharts() {
+        const completionCtx = document
+          .getElementById("completionChart")
+          .getContext("2d");
+        const stateCtx = document.getElementById("stateChart").getContext("2d");
+
+        const completed = allData.filter(
+          (item) => item.finalStatus === "Completed",
+        ).length;
+        const pending = allData.length - completed;
+
+        completionChart = new Chart(completionCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Completed", "Pending"],
+            datasets: [
+              {
+                data: [completed, pending],
+                backgroundColor: ["#10b981", "#f59e0b"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+
+        const stateCounts = {};
+        allData.forEach((item) => {
+          stateCounts[item.state] = (stateCounts[item.state] || 0) + 1;
+        });
+
+        const topStates = Object.entries(stateCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5);
+
+        stateChart = new Chart(stateCtx, {
+          type: "bar",
+          data: {
+            labels: topStates.map(([state]) => state),
+            datasets: [
+              {
+                label: "Banks",
+                data: topStates.map(([, count]) => count),
+                backgroundColor: "#0f4c81",
+                borderRadius: 8,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              datalabels: {
+                color: "#121211",
+                font: {
+                  weight: "bold",
+                  size: 16,
+                },
+                anchor: "end",
+                align: "top",
+                offset: -4,
+                formatter: (value) => value,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 5,
+                },
+              },
+            },
+          },
+          plugins: [ChartDataLabels],
+        });
+      }
+
+      // Update Charts
+      function updateCharts() {
+        const completed = filteredData.filter(
+          (item) => item.finalStatus === "Completed",
+        ).length;
+        const pending = filteredData.length - completed;
+
+        completionChart.data.datasets[0].data = [completed, pending];
+        completionChart.update();
+
+        const stateCounts = {};
+        filteredData.forEach((item) => {
+          stateCounts[item.state] = (stateCounts[item.state] || 0) + 1;
+        });
+
+        const topStates = Object.entries(stateCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5);
+
+        stateChart.data.labels = topStates.map(([state]) => state);
+        stateChart.data.datasets[0].data = topStates.map(([, count]) => count);
+        stateChart.update();
+      }
+
+      // Export to CSV (with password protection)
+      function exportToCSV() {
+        const headers = [
+          "Bank Name",
+          "State",
+          "Type",
+          "Region Total",
+          "Region Uploaded",
+          "Region Errors",
+          "Branch Total",
+          "Branch Uploaded",
+          "Branch Errors",
+          "PACS Total",
+          "PACS Uploaded",
+          "PACS Errors",
+          "Final Status",
+        ];
+
+        let csv = headers.join(",") + "\n";
+
+        filteredData.forEach((item) => {
+          const row = [
+            `"${item.bankName}"`,
+            `"${item.state}"`,
+            item.type,
+            item.regionTotal,
+            item.regionUploaded,
+            item.regionErrors,
+            item.branchTotal,
+            item.branchUploaded,
+            item.branchErrors,
+            item.pacsTotal,
+            item.pacsUploaded,
+            item.pacsErrors,
+            item.finalStatus,
+          ];
+          csv += row.join(",") + "\n";
+        });
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `banking_onboarding_data_${new Date().toISOString().split("T")[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("passwordModal");
+        if (event.target === modal) {
+          closePasswordModal();
+        }
+      };
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        loadGoogleSheetsData();
+      });
+    </script>
+  </body>
+</html>
