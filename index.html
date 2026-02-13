@@ -1115,33 +1115,30 @@
 
       // Search Table
       function searchTable() {
-        const searchTerm = document
+        const term = document
           .getElementById("searchInput")
-          .value.toLowerCase();
+          .value.trim()
+          .toLowerCase();
 
-        if (!searchTerm) {
-          filteredData = allData.filter((item) => {
-            const bankType = document.getElementById("filterBankType").value;
-            const state = document.getElementById("filterState").value;
-            const bankName = document.getElementById("filterBankName").value;
-            const status = document.getElementById("filterStatus").value;
+        const bankType = document.getElementById("filterBankType").value;
+        const state = document.getElementById("filterState").value;
+        const bankName = document.getElementById("filterBankName").value;
+        const status = document.getElementById("filterStatus").value;
 
-            return (
-              (!bankType || item.type === bankType) &&
-              (!state || item.state === state) &&
-              (!bankName || item.bankName === bankName) &&
-              (!status || item.finalStatus === status)
-            );
-          });
-        } else {
-          filteredData = allData.filter((item) => {
-            return (
-              item.bankName.toLowerCase().includes(searchTerm) ||
-              item.state.toLowerCase().includes(searchTerm) ||
-              item.type.toLowerCase().includes(searchTerm)
-            );
-          });
-        }
+        filteredData = allData.filter((item) => {
+          const matchesDropdown =
+            (!bankType || item.type === bankType) &&
+            (!state || item.state === state) &&
+            (!bankName || item.bankName === bankName) &&
+            (!status || item.finalStatus === status);
+
+          if (!matchesDropdown) return false;
+
+          if (!term) return true;
+
+          // 🔥 SEARCH ONLY BANK NAME
+          return (item.bankName || "").toLowerCase().includes(term);
+        });
 
         updateStats();
         renderTable();
