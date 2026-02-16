@@ -850,15 +850,15 @@
               type: values[0].trim(), // Column A: TYPE
               state: values[1].trim(), // Column B: STATE NAME
               bankName: values[2].trim(), // Column C: BANK NAME
-              regionTotal: parseInt(values[7]) || 0, // Column H
-              regionUploaded: parseInt(values[8]) || 0, // Column I
-              regionErrors: parseInt(values[9]) || 0, // Column J
-              branchTotal: parseInt(values[11]) || 0, // Column L
-              branchUploaded: parseInt(values[12]) || 0, // Column M
-              branchErrors: parseInt(values[13]) || 0, // Column N
-              pacsTotal: parseInt(values[15]) || 0, // Column P
-              pacsUploaded: parseInt(values[16]) || 0, // Column Q
-              pacsErrors: parseInt(values[17]) || 0, // Column R
+              regionTotal: parseInt(values[6]) || 0, // Column G
+              regionUploaded: parseInt(values[7]) || 0, // Column H
+              regionErrors: parseInt(values[8]) || 0, // Column I
+              branchTotal: parseInt(values[10]) || 0, // Column K
+              branchUploaded: parseInt(values[11]) || 0, // Column L
+              branchErrors: parseInt(values[12]) || 0, // Column M
+              pacsTotal: parseInt(values[14]) || 0, // Column O
+              pacsUploaded: parseInt(values[15]) || 0, // Column P
+              pacsErrors: parseInt(values[16]) || 0, // Column Q
               finalStatus: (values[25] || "Not Completed").trim(), // Column Z: FINAL STATUS
             };
 
